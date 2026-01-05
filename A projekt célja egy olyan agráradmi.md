@@ -6,12 +6,12 @@ A projekt célja egy olyan **agráradminisztrációs webalkalmazás** fejleszté
 
 Bejelentkezés után a felhasználót egy **összefoglaló kezdőoldal (Dashboard)** fogadja, ahol az alábbi főbb mutatók jelennek meg:
 
-- 🐄 Az állatok aktuális száma  
+- 🐄 Állatok száma  
 - 💰 Aktuális pénzügyi egyenleg  
 - ⏳ Közelgő feladatok  
 - 📊 Alapvető statisztikák  
 
-Az alkalmazás több, egymástól elkülönülő, mégis szorosan együttműködő modulból áll.
+Az alkalmazás több, külön funkcionális területet lefedő modulból áll.
 
 ---
 
@@ -19,17 +19,17 @@ Az alkalmazás több, egymástól elkülönülő, mégis szorosan együttműköd
 
 ### 🐄 Állatok modul
 
-Az Állatok modul az állatállomány részletes nyilvántartását biztosítja.
+Az Állatok modul lehetőséget biztosít új állatok részletes rögzítésére.
 
 **Funkciók:**
-- Új állatok rögzítése
-- Egyedi adatlap minden állathoz
-- Kapcsolódó dokumentumok kezelése
-- Állatorvosi jegyzetek és egészségügyi adatok rögzítése
+- Új egyedek felvétele  
+- Egyedi adatlap minden állathoz  
+- Kapcsolódó dokumentumok tárolása  
+- Állatorvosi jegyzetek és egészségügyi információk rögzítése  
 
 **Tárolt adatok:**
 - faj  
-- egyedi azonosító  
+- azonosító  
 - életkor  
 - istálló  
 - megjegyzések  
@@ -41,24 +41,19 @@ Az Állatok modul az állatállomány részletes nyilvántartását biztosítja.
 A Földek modul a saját és bérelt területek kezelésére szolgál.
 
 **Funkciók:**
-- Földterületek rögzítése
-- Az adott földeken elvégzett munkafolyamatok nyomon követése
-
-**Tárolt adatok:**
-- név  
-- helyrajzi szám  
-- területméret  
+- Földek felvitele névvel, helyrajzi számmal és mérettel  
+- Az adott földön elvégzett munkafolyamatok nyomon követése  
 
 ---
 
 ### 📁 Dokumentáció modul
 
-A Dokumentáció modul egy **központi tárhelyet** biztosít minden, a gazdaság működéséhez kapcsolódó irat számára.
+A Dokumentáció modul egy **központi tárhelyet** biztosít minden fontos irat számára.
 
 **Kezelt dokumentumok:**
 - bérleti szerződések  
 - támogatási formanyomtatványok  
-- egyéb hivatalos dokumentumok  
+- egyéb hivatalos iratok  
 
 **Funkciók:**
 - rendszerezett tárolás  
@@ -68,13 +63,12 @@ A Dokumentáció modul egy **központi tárhelyet** biztosít minden, a gazdasá
 
 ### 💸 Költségvetés modul
 
-A Költségvetés modul a pénzügyi adatok átlátható kezelését teszi lehetővé.
+A Költségvetés modul a pénzügyi adatok kategorizált kezelését teszi lehetővé.
 
 **Funkciók:**
-- bevételek és kiadások rögzítése
-- kategorizálás
-- automatikus pénzügyi egyenlegszámítás
-- grafikonok és kimutatások készítése
+- bevételek és kiadások rögzítése  
+- automatikus egyenlegszámítás  
+- grafikonok és kimutatások készítése  
 
 **Riportok:**
 - havi bontás  
@@ -84,7 +78,7 @@ A Költségvetés modul a pénzügyi adatok átlátható kezelését teszi lehet
 
 ### 👥 Ügyfelek modul
 
-Az Ügyfelek modul célja egy egységes kapcsolattartói adatbázis létrehozása.
+Az Ügyfelek modul egy egységes adatbázist biztosít a kapcsolattartók számára.
 
 **Kezelt kapcsolatok:**
 - felvásárlók  
@@ -98,12 +92,12 @@ Az Ügyfelek modul célja egy egységes kapcsolattartói adatbázis létrehozás
 
 ### 🛒 Piactér modul
 
-A Piactér modul lehetőséget biztosít saját erőforrások értékesítésére.
+A Piactér modul lehetőséget ad saját állatok vagy földek meghirdetésére.
 
 **Lehetőségek:**
 - állatok meghirdetése  
-- földterületek meghirdetése  
-- árak, leírások és képek megjelenítése  
+- földek meghirdetése  
+- árak, leírások és képek feltöltése  
 
 ---
 
@@ -148,33 +142,31 @@ A Piactér modul lehetőséget biztosít saját erőforrások értékesítésér
 ### „A” fejlesztő
 - Backend fejlesztés  
 - Adatbázis kezelés  
-- Állatok és Földek modul logikai megvalósítása  
+- Állatok és Földek modul működési logikája  
 - E-mail küldési funkciók  
 
 ### „B” fejlesztő
-- Frontend megjelenés és használhatóság  
-- Költségvetés modul felülete  
-- Ügyfelek modul felülete  
-- Piactér grafikus elemei  
+- Frontend megjelenés és UX  
+- Költségvetés, Ügyfelek és Piactér modulok felületei  
+- Grafikus elemek kialakítása  
 
 ### 🤝 Közös feladatok
 - Kezdőoldal kialakítása  
-- Tesztelés  
-- Hibajavítás  
-- Végső dokumentáció elkészítése  
+- Tesztelés és hibajavítás  
+- Végső dokumentáció összeállítása  
 
 ---
 
 ## ⏱️ Fejlesztési ütemezés
 
 1. Funkcionális követelmények és adatbázisterv elkészítése  
-2. Projekt alapstruktúrájának felépítése  
+2. Projekt alapstruktúra felépítése  
 3. Modulok egymás utáni fejlesztése  
 4. Tesztelés és optimalizálás  
-5. Prezentáció és szakmai vizsgához szükséges dokumentáció elkészítése  
+5. Prezentáció és dokumentáció elkészítése  
 
 ---
 
 ## ✅ Összegzés
 
-A projekt végére egy **modern, könnyen használható agráradminisztrációs webalkalmazás** jön létre, amely hatékonyan támogatja a mezőgazdasági adminisztrációt és a gazdaság mindennapi működését.
+A projekt végére egy **modern, könnyen használható webalkalmazás** jön létre, amely hatékonyan támogatja a mezőgazdasági adminisztrációt.
