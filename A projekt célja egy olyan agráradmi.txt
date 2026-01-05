@@ -1,9 +1,152 @@
-A projekt célja egy olyan agráradminisztrációs webalkalmazás fejlesztése, amely egyetlen felületen teszi átláthatóvá és kezelhetővé a gazdaság működéséhez szükséges összes lényeges információt. Bejelentkezés után a felhasználót egy összefoglaló kezdőoldal fogadja, ahol megjelennek az eddig rögzített adatok főbb mutatói: az állatok száma, az aktuális pénzügyi egyenleg, a közelgő feladatok és az alapvető statisztikák. Az alkalmazás több, külön funkcionális területet lefedő modulból áll.
+# Agráradminisztrációs Webalkalmazás
 
-Az Állatok modulban új egyedek rögzíthetők részletes adatokkal (például faj, azonosító, életkor, istálló, megjegyzések). Minden állathoz külön adatlap tartozik, ahol eltárolhatók a kapcsolódó dokumentumok, valamint hozzáadhatók állatorvosi jegyzetek és egészségügyi információk. A Földek modul hasonló elven működik: felvihetők saját vagy bérelt területek névvel, helyrajzi számmal és mérettel, illetve nyomon követhetők az adott földön elvégzett munkafolyamatok. A Dokumentáció rész egy központi tárhelyet biztosít minden fontos iratnak, ahol a beszkennelt vagy feltöltött dokumentumok rendszerezetten tárolhatók és szükség esetén letölthetők (például bérleti szerződések, támogatási formanyomtatványok és egyéb hivatalos papírok).
+## 📌 Projekt áttekintés
 
-A Költségvetés modul a bevételek és kiadások kategorizált rögzítését teszi lehetővé, a rendszer pedig automatikusan számolja a pénzügyi egyenleget, illetve grafikonokat és kimutatásokat készít havi vagy éves bontásban. Az Ügyfelek menü célja egy egységes adatbázis létrehozása a felvásárlók, partnerek és egyéb kapcsolattartók számára, ahonnan akár kör-e-mail is küldhető. A Piactér modul lehetőséget ad saját állatok vagy földek meghirdetésére árakkal, leírásokkal és képekkel.
+A projekt célja egy **agráradminisztrációs webalkalmazás** fejlesztése, amely egyetlen felületen teszi átláthatóvá és kezelhetővé a gazdaság működéséhez szükséges összes lényeges információt.  
+Az alkalmazás modern megoldást nyújt a mezőgazdasági adminisztráció digitalizálására és egyszerűsítésére.
 
-A fejlesztés modern és stabil technológiákra épül: a frontend HTML5, CSS3, JavaScript és Bootstrap felhasználásával készül, a backend PHP alapú, REST-szerű végpontokkal, az adatbázis pedig MySQL/MariaDB-ben valósul meg jól strukturált táblákkal (users, animals, animal_docs, lands, land_logs, clients, expenses, incomes, marketplace stb.). A fejlesztők Visual Studio Code-ban dolgoznak, a verziókezelés Git és GitHub használatával történik. A munkamegosztás szerint az „A” fejlesztő felel a backendért, az adatbázisért, valamint az Állatok és Földek modul működési logikájáért (beleértve az e-mailküldést), míg a „B” fejlesztő a frontend megjelenését és használhatóságát alakítja ki, és ő készíti a Költségvetés, Ügyfelek és Piactér modulok felületeit és grafikus elemeit. Közös feladatként valósul meg a kezdőoldal kialakítása, a tesztelés, hibajavítás és a végső dokumentáció összeállítása.
+Bejelentkezés után a felhasználót egy **összefoglaló kezdőoldal (Dashboard)** fogadja, ahol megjelennek:
+- az állatok aktuális száma
+- a pénzügyi egyenleg
+- a közelgő feladatok
+- alapvető statisztikák és kimutatások
 
-A fejlesztés ütemezetten zajlik: első lépésként elkészülnek a funkcionális követelmények és az adatbázisterv, ezt követi a projekt alapstruktúrájának felépítése, majd a modulok egymás utáni fejlesztése. A záró szakaszban történik a tesztelés, optimalizálás, valamint a szakmai vizsgához szükséges prezentáció és dokumentáció elkészítése. A projekt végére egy modern, könnyen használható, a mezőgazdasági adminisztrációt hatékonyan támogató webalkalmazás jön létre.
+Az alkalmazás több, egymástól elkülönülő funkcionális modulból áll.
+
+---
+
+## 🧩 Modulok bemutatása
+
+### 🐄 Állatok modul
+Az Állatok modulban új egyedek rögzíthetők részletes adatokkal:
+- faj
+- egyedi azonosító
+- életkor
+- istálló
+- megjegyzések
+
+Minden állathoz külön adatlap tartozik, ahol:
+- kapcsolódó dokumentumok tárolhatók
+- állatorvosi jegyzetek és egészségügyi információk rögzíthetők
+
+---
+
+### 🌱 Földek modul
+A Földek modul lehetőséget biztosít:
+- saját vagy bérelt földterületek rögzítésére
+- név, helyrajzi szám és területméret megadására
+- az adott földeken elvégzett munkafolyamatok nyomon követésére
+
+---
+
+### 📁 Dokumentáció
+A Dokumentáció modul egy **központi tárhelyet** biztosít minden fontos irat számára:
+- beszkennelt vagy feltöltött dokumentumok rendszerezett tárolása
+- fájlok letöltése szükség esetén
+
+Példák:
+- bérleti szerződések
+- támogatási formanyomtatványok
+- egyéb hivatalos dokumentumok
+
+---
+
+### 📊 Költségvetés
+A Költségvetés modul funkciói:
+- bevételek és kiadások kategorizált rögzítése
+- automatikus pénzügyi egyenleg számítás
+- havi és éves bontású grafikonok és kimutatások
+
+---
+
+### 👥 Ügyfelek
+Az Ügyfelek menü célja egy egységes adatbázis létrehozása:
+- felvásárlók
+- partnerek
+- egyéb kapcsolattartók
+
+A modul lehetőséget biztosít **kör-e-mail küldésére** is.
+
+---
+
+### 🛒 Piactér
+A Piactér modulban lehetőség van:
+- saját állatok meghirdetésére
+- földterületek értékesítésére vagy bérbeadására
+
+A hirdetések tartalmazhatnak:
+- árakat
+- részletes leírást
+- képeket
+
+---
+
+## ⚙️ Technológiai háttér
+
+A projekt fejlesztése modern és stabil technológiákra épül:
+
+### Frontend
+- HTML5
+- CSS3
+- JavaScript
+- Bootstrap
+
+### Backend
+- PHP
+- REST-szerű végpontok
+
+### Adatbázis
+- MySQL / MariaDB
+
+Példa adatbázis táblák:
+- `users`
+- `animals`
+- `animal_docs`
+- `lands`
+- `land_logs`
+- `clients`
+- `expenses`
+- `incomes`
+- `marketplace`
+
+### Fejlesztői eszközök
+- Visual Studio Code
+- Git
+- GitHub
+
+---
+
+## 👨‍💻 Munkamegosztás
+
+### „A” fejlesztő
+- backend fejlesztés
+- adatbázis tervezés és kezelés
+- Állatok és Földek modul üzleti logikája
+- e-mail küldési funkciók
+
+### „B” fejlesztő
+- frontend megjelenés és felhasználói élmény (UI/UX)
+- Költségvetés, Ügyfelek és Piactér modulok felületei
+- grafikus elemek kialakítása
+
+### Közös feladatok
+- kezdőoldal (Dashboard) kialakítása
+- tesztelés és hibajavítás
+- végső dokumentáció elkészítése
+
+---
+
+## 🗓️ Fejlesztési ütemterv
+
+1. Funkcionális követelmények meghatározása  
+2. Adatbázisterv elkészítése  
+3. Projekt alapstruktúrájának létrehozása  
+4. Modulok egymás utáni fejlesztése  
+5. Tesztelés és optimalizálás  
+6. Prezentáció és szakmai vizsgához szükséges dokumentáció elkészítése  
+
+---
+
+## ✅ Projekt cél
+
+A projekt végére egy **modern, könnyen használható webalkalmazás** készül el, amely hatékonyan támogatja a mezőgazdasági adminisztrációt, és átlátható módon segíti a gazdaság mindennapi működését.
