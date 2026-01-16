@@ -2,11 +2,11 @@
 
 ## 📌 Projekt célja
 
-Az **Agráradminisztrációs Webalkalmazás** célja egy olyan modern, jól átlátható rendszer létrehozása, amely egyetlen felületen segíti a mezőgazdasági gazdaságok adminisztrációját, a munkafolyamatok nyomon követését és a megalapozott döntéshozatalt.
+Az **Agráradminisztrációs Webalkalmazás** célja egy korszerű, könnyen áttekinthető rendszer létrehozása, amely egyetlen felületen támogatja a mezőgazdasági gazdaságok adminisztratív feladatait, a munkafolyamatok követését és az adatvezérelt döntéshozatalt.
 
-Bejelentkezés után a felhasználót egy **áttekintő dashboard** fogadja, ahol az alábbi kulcsadatok jelennek meg:
+Bejelentkezést követően a felhasználót egy összefoglaló dashboard fogadja, ahol az alábbi kulcsinformációk érhetők el:
 
-- 🐄 Állatok aktuális száma  
+- 🐄 Aktuális állatlétszám  
 - 💰 Pénzügyi egyenleg  
 - ⏳ Közelgő feladatok  
 - 📊 Alapvető statisztikák és kimutatások  
@@ -15,17 +15,17 @@ Bejelentkezés után a felhasználót egy **áttekintő dashboard** fogadja, aho
 
 ## 🧩 Funkcionális modulok
 
-Az alkalmazás moduláris felépítésű, az egyes részek különállóak, mégis szorosan együttműködnek.
+Az alkalmazás moduláris rendszerben épül fel: az egyes modulok önállóan működnek, ugyanakkor szorosan együttműködnek egymással.
 
 ### 🐑 Állatok modul
 
-Az állatok teljes körű nyilvántartására szolgál.
+Az állatállomány teljes körű nyilvántartását biztosítja.
 
 **Funkciók:**
 - Új állatok rögzítése
-- Egyedi adatlap minden állathoz
-- Dokumentumfeltöltés
-- Állatorvosi és egészségügyi jegyzetek
+- Egyedi adatlapok kezelése
+- Dokumentumok feltöltése
+- Állatorvosi és egészségügyi megjegyzések
 
 **Tárolt adatok:**
 - faj  
@@ -38,10 +38,10 @@ Az állatok teljes körű nyilvántartására szolgál.
 
 ### 🌾 Földek modul
 
-A saját és bérelt földterületek kezelését teszi lehetővé.
+A saját és bérelt földterületek adminisztrációját segíti.
 
 **Funkciók:**
-- Földterületek rögzítése
+- Földterületek nyilvántartása
 - Elvégzett munkák és tevékenységek naplózása
 
 **Tárolt adatok:**
@@ -61,14 +61,14 @@ Központi dokumentumtár a gazdasághoz kapcsolódó iratok számára.
 - hivatalos és egyéb iratok  
 
 **Funkciók:**
-- rendszerezett tárolás  
-- gyors letöltés  
+- strukturált tárolás  
+- gyors letöltési lehetőség 
 
 ---
 
 ### 💸 Költségvetés modul
 
-A gazdaság pénzügyeinek átlátható kezelése.
+A gazdaság pénzügyeinek átlátható nyomon követését szolgálja.
 
 **Funkciók:**
 - bevételek és kiadások rögzítése
@@ -84,7 +84,7 @@ A gazdaság pénzügyeinek átlátható kezelése.
 
 ### 👥 Ügyfelek modul
 
-Egységes kapcsolattartói adatbázis.
+Egységes adatbázist biztosít a kapcsolattartók számára.
 
 **Típusok:**
 - felvásárlók  
@@ -98,7 +98,7 @@ Egységes kapcsolattartói adatbázis.
 
 ### 🛒 Piactér modul
 
-Értékesítést támogató funkciók.
+Az értékesítési folyamatokat támogató funkciókat tartalmaz.
 
 **Lehetőségek:**
 - állatok meghirdetése  
@@ -167,8 +167,8 @@ Egységes kapcsolattartói adatbázis.
 
 ## ⏱️ Fejlesztési ütemezés
 
-1. Funkcionális követelmények és adatbázisterv  
-2. Projekt alapstruktúra kialakítása  
+1. Funkcionális követelmények és adatbázisterv kidolgozása 
+2. Projekt alapstruktúra létrehozása 
 3. Modulok fokozatos fejlesztése  
 4. Tesztelés és optimalizálás  
 5. Vizsgához szükséges prezentáció és dokumentáció  
@@ -177,4 +177,4 @@ Egységes kapcsolattartói adatbázis.
 
 ## ✅ Összegzés
 
-A projekt eredményeként egy **modern, skálázható és felhasználóbarát agráradminisztrációs rendszer** jön létre, amely valódi segítséget nyújt a mezőgazdasági vállalkozások mindennapi működésében.
+A projekt eredményeként egy **modern, skálázható és felhasználóbarát agráradminisztrációs webalkalmazás** készül el, amely hatékony támogatást nyújt a mezőgazdasági vállalkozások mindennapi működéséhez.
