@@ -103,6 +103,41 @@ CREATE TABLE IF NOT EXISTS `documents` (
   INDEX idx_entity (entity_type, entity_id),
   INDEX idx_category (category)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ================================================
+-- Employees table
+-- ================================================
+CREATE TABLE IF NOT EXISTS `employees` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `user_id` int(11) DEFAULT NULL,
+  `name` varchar(255) NOT NULL,
+  `position` varchar(255) DEFAULT NULL,
+  `hourly_rate` decimal(10,2) DEFAULT 0,
+  `phone` varchar(50) DEFAULT NULL,
+  `email` varchar(255) DEFAULT NULL,
+  `hire_date` date DEFAULT NULL,
+  `status` enum('active','inactive','on_leave') DEFAULT 'active',
+  `notes` text DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  FOREIGN KEY (`user_id`) REFERENCES `users`(`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- ================================================
+-- Timesheets table
+-- ================================================
+CREATE TABLE IF NOT EXISTS `timesheets` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `employee_id` int(11) NOT NULL,
+  `work_date` date NOT NULL,
+  `hours_worked` decimal(5,2) NOT NULL,
+  `hourly_rate` decimal(10,2) NOT NULL,
+  `total_pay` decimal(10,2) GENERATED ALWAYS AS (hours_worked * hourly_rate) STORED,
+  `description` text DEFAULT NULL,
+  `status` enum('pending','approved','rejected') DEFAULT 'pending',
+  `created_by` int(11) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  FOREIGN KEY (`employee_id`) REFERENCES `employees`(`id`) ON DELETE CASCADE,
+  FOREIGN KEY (`created_by`) REFERENCES `users`(`id`) ON DELETE SET NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
 -- ================================================

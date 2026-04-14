@@ -264,7 +264,7 @@ app.post('/api/auth/login', async (req, res) => {
     return res.status(400).json({ error: 'identifier, password required' });
   }
 
-  const users = await query('SELECT id, username, email, password_hash, role FROM users WHERE username = ? OR email = ? LIMIT 1', [identifier, identifier]);
+  const users = await query('SELECT id, username, email, password_hash, role, avatar FROM users WHERE username = ? OR email = ? LIMIT 1', [identifier, identifier]);
   const u = users[0];
   if (!u) return res.status(401).json({ error: 'Invalid credentials' });
 
@@ -276,12 +276,12 @@ app.post('/api/auth/login', async (req, res) => {
     username: u.username,
     role: u.role
   });
-  return res.json({ token, user: { id: u.id, username: u.username, email: u.email, role: u.role } });
+  return res.json({ token, user: { id: u.id, username: u.username, email: u.email, role: u.role, avatar: u.avatar || null } });
 });
 
 app.get('/api/me', requireAuth, async (req, res) => {
   const userId = req.user.userId;
-  const rows = await query('SELECT id, username, email, created_at, role FROM users WHERE id = ? LIMIT 1', [userId]);
+  const rows = await query('SELECT id, username, email, created_at, role, avatar FROM users WHERE id = ? LIMIT 1', [userId]);
   if (!rows[0]) return res.status(404).json({ error: 'User not found' });
   return res.json({ user: rows[0] });
 });

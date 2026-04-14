@@ -17,6 +17,7 @@ type AuthContextValue = {
   isLoading: boolean;
   login: (identifier: string, password: string) => Promise<void>;
   register: (username: string, email: string, password: string, phone?: string, location?: string, avatar?: File) => Promise<void>;
+  refreshUser: () => Promise<void>;
   logout: () => void;
 };
 
@@ -85,6 +86,15 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       localStorage.setItem(TOKEN_KEY, data.token);
       setToken(data.token);
       setUser(data.user);
+    },
+    refreshUser: async () => {
+      if (!token) return;
+      try {
+        const data = await apiRequest<{ user: AuthUser }>('/api/me', { token });
+        setUser(data.user);
+      } catch (error) {
+        console.error('Error refreshing user:', error);
+      }
     },
     logout: () => {
       localStorage.removeItem(TOKEN_KEY);

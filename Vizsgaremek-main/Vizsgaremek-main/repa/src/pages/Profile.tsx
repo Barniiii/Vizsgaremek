@@ -16,7 +16,7 @@ interface ProfileData {
 
 const Profile = () => {
   const { isDarkMode } = useTheme();
-  const { user, token } = useAuth();
+  const { user, token, refreshUser } = useAuth();
   const { success, error: showError } = useNotification();
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const [activeTab, setActiveTab] = useState<'profile' | 'security' | 'notifications'>('profile');
@@ -122,6 +122,7 @@ const Profile = () => {
         const data = await response.json();
         console.log('Profil mentve:', data);
         setIsEditing(false);
+        if (refreshUser) await refreshUser();
         success('Siker', 'Profil sikeresen mentve!');
       } else {
         const errorData = await response.json();
@@ -167,6 +168,7 @@ const Profile = () => {
             ...profileData,
             avatar: data.avatarUrl,
           });
+          await refreshUser();
           success('Siker', 'Profilkép sikeresen feltöltve!');
         } else {
           const errorData = await response.json();

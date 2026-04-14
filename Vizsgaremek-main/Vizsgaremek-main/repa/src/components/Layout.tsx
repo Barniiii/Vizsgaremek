@@ -1,4 +1,4 @@
-import { ReactNode, useState } from 'react';
+import { ReactNode, useEffect, useState } from 'react';
 import { useRole } from '../auth/AuthContext';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -35,6 +35,7 @@ const userRole = role || 'viewer';
 console.log("ROLE:", role);
 console.log("USER OBJECT:", user);
   const [isProfileMenuOpen, setIsProfileMenuOpen] = useState<boolean>(false);
+  const [avatarLoadError, setAvatarLoadError] = useState<boolean>(false);
 
 const navItems = [
   { path: '/dashboard', icon: LayoutDashboard, label: 'Dashboard', roles: ['owner','admin','worker','accountant','viewer'] },
@@ -69,6 +70,19 @@ const navItems = [
       .toUpperCase()
       .slice(0, 2);
   };
+
+  const avatarUrl = (() => {
+    if (!user?.avatar) return null;
+    if (user.avatar.startsWith('http://') || user.avatar.startsWith('https://')) {
+      return user.avatar;
+    }
+    const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:4001';
+    return `${apiUrl}${user.avatar}`;
+  })();
+
+  useEffect(() => {
+    setAvatarLoadError(false);
+  }, [avatarUrl]);
 
   return (
     <div className="flex h-screen bg-gray-50 dark:bg-gray-900">
@@ -107,8 +121,17 @@ const navItems = [
             onClick={() => setIsProfileMenuOpen(!isProfileMenuOpen)}
             className="w-full flex items-center gap-3 p-2 rounded-lg hover:bg-green-600 dark:hover:bg-green-800 transition-colors group"
           >
-            <div className="w-10 h-10 rounded-md bg-green-800 dark:bg-green-950 flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:ring-2 group-hover:ring-green-300 dark:group-hover:ring-green-600 transition-all">
-              <span>{getInitials()}</span>
+            <div className="w-10 h-10 rounded-full bg-green-800 dark:bg-green-950 flex items-center justify-center text-white font-bold text-lg shadow-lg group-hover:ring-2 group-hover:ring-green-300 dark:group-hover:ring-green-600 overflow-hidden transition-all">
+              {avatarUrl && !avatarLoadError ? (
+                <img
+                  src={avatarUrl}
+                  alt="Profil"
+                  className="w-full h-full object-cover"
+                  onError={() => setAvatarLoadError(true)}
+                />
+              ) : (
+                <span>{getInitials()}</span>
+              )}
             </div>
             
             <div className="flex-1 text-left">
