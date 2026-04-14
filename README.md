@@ -1,7 +1,5 @@
 # BBAgrar / Vizsgaremek
 
-Professzionális, moduláris agrár- és vállalkozásmenedzsment webalkalmazás mezőgazdasági vállalkozások, állattartók és gazdaságüzemeltetők számára.
-
 ## Áttekintés
 
 A BBAgrar egy teljes stack webalkalmazás, amely modern adminisztrációs és menedzsment eszközöket biztosít mezőgazdasági vállalkozások számára. A rendszer központi célja, hogy egyetlen platformon kezelhető legyen a gazdaság működésének legtöbb operatív területe.
@@ -240,5 +238,4 @@ Belső / oktatási / vizsgaprojekt felhasználásra készült. Kereskedelmi felh
 
 ## Készítő
 
-Készítette: Balázs Savanyó
-Vizsgaremek projekt / portfólió rendszer
+Készítette: Nagy Barnabás, Savanyó Balázs
