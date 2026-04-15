@@ -4,10 +4,10 @@ export interface CalendarEvent {
   id?: number;
   title: string;
   description?: string;
-  event_date: string; // YYYY-MM-DD
-  event_time?: string; // HH:MM
-  end_date?: string; // YYYY-MM-DD
-  end_time?: string; // HH:MM
+  event_date: string; 
+  event_time?: string; 
+  end_date?: string; 
+  end_time?: string; 
   event_type: 'task' | 'appointment' | 'feeding' | 'vet' | 'harvest' | 'other';
   priority: 'low' | 'medium' | 'high' | 'urgent';
   status: 'pending' | 'completed' | 'cancelled';
@@ -27,27 +27,27 @@ export interface CalendarEventWithAnimal extends CalendarEvent {
   animal_species?: string;
 }
 
-// Helper: Normalize DB fields to form fields
+
 function normalizeEvent(event: any): CalendarEventWithAnimal {
-  // Format times - MySQL returns HH:MM:SS, HTML input needs HH:MM
+
   const formatTimeField = (timeStr?: string) => {
     if (!timeStr) return undefined;
-    // Take first 5 chars (HH:MM from HH:MM:SS)
+
     return timeStr.substring(0, 5);
   };
 
-  // Format event_date - ensure YYYY-MM-DD format
+
   const formatDateField = (dateStr?: string) => {
     if (!dateStr) return undefined;
-    // If it's already YYYY-MM-DD (10 chars), return as is
+
     if (typeof dateStr === 'string' && dateStr.length === 10) {
       return dateStr;
     }
-    // If it's an ISO string (2026-03-29T00:00:00Z), extract YYYY-MM-DD
+
     if (typeof dateStr === 'string' && dateStr.includes('T')) {
       return dateStr.split('T')[0];
     }
-    // If it's a Date object, convert to YYYY-MM-DD
+
     if (dateStr instanceof Date) {
       const year = dateStr.getFullYear();
       const month = String(dateStr.getMonth() + 1).padStart(2, '0');
@@ -59,20 +59,18 @@ function normalizeEvent(event: any): CalendarEventWithAnimal {
 
   return {
     ...event,
-    event_date: formatDateField(event.event_date), // Ensure YYYY-MM-DD format
-    event_time: formatTimeField(event.start_time || event.event_time), // Map start_time -> event_time, format to HH:MM
-    start_time: formatTimeField(event.start_time), // Also format start_time in case it's needed
-    end_time: formatTimeField(event.end_time), // Format end_time
-    recurring_end_date: formatDateField(event.recurring_end_date), // Format this too
+    event_date: formatDateField(event.event_date), 
+    event_time: formatTimeField(event.start_time || event.event_time), 
+    start_time: formatTimeField(event.start_time), 
+    end_time: formatTimeField(event.end_time), 
+    recurring_end_date: formatDateField(event.recurring_end_date), 
   };
 }
 
-// Token lekérése a localStorage-ból
 function getToken(): string | null {
   return localStorage.getItem('bbagrar_token');
 }
 
-// Események lekérése dátum intervallum alapján
 export const getEvents = async (
   startDate: string,
   endDate: string
@@ -90,7 +88,6 @@ export const getEvents = async (
   }
 };
 
-// Egy nap eseményeinek lekérése
 export const getEventsByDate = async (date: string): Promise<CalendarEventWithAnimal[]> => {
   const token = getToken();
   try {
@@ -105,7 +102,6 @@ export const getEventsByDate = async (date: string): Promise<CalendarEventWithAn
   }
 };
 
-// Egy esemény lekérése ID alapján
 export const getEventById = async (id: number): Promise<CalendarEventWithAnimal | undefined> => {
   const token = getToken();
   try {
@@ -120,13 +116,11 @@ export const getEventById = async (id: number): Promise<CalendarEventWithAnimal 
   }
 };
 
-// Új esemény hozzáadása
 export const addEvent = async (event: Omit<CalendarEvent, 'id' | 'created_at' | 'updated_at'>): Promise<number> => {
   const token = getToken();
   try {
     console.log('📅 Adding event:', event);
     
-    // Konvertáld az event_time-ot start_time-ra az adatbázis számára
     const dbEvent = {
       title: event.title,
       description: event.description,
@@ -160,16 +154,13 @@ export const addEvent = async (event: Omit<CalendarEvent, 'id' | 'created_at' | 
   }
 };
 
-// Esemény módosítása
 export const updateEvent = async (id: number, event: Partial<CalendarEvent>): Promise<void> => {
   const token = getToken();
   try {
     console.log('✏️ Updating event:', id, event);
     
-    // Konvertáld az event_time-ot start_time-ra az adatbázis számára
     const dbEvent: any = {};
     
-    // Explicit mezőkezelés
     if (event.title !== undefined) dbEvent.title = event.title;
     if (event.description !== undefined) dbEvent.description = event.description;
     if (event.event_date !== undefined) dbEvent.event_date = event.event_date;
@@ -201,7 +192,6 @@ export const updateEvent = async (id: number, event: Partial<CalendarEvent>): Pr
   }
 };
 
-// Esemény törlése
 export const deleteEvent = async (id: number): Promise<void> => {
   const token = getToken();
   try {
@@ -215,7 +205,6 @@ export const deleteEvent = async (id: number): Promise<void> => {
   }
 };
 
-// Esemény státuszának módosítása
 export const updateEventStatus = async (id: number, status: CalendarEvent['status']): Promise<void> => {
   const token = getToken();
   try {
@@ -230,7 +219,6 @@ export const updateEventStatus = async (id: number, status: CalendarEvent['statu
   }
 };
 
-// Közelgő események lekérése
 export const getUpcomingEvents = async (days: number = 7): Promise<CalendarEventWithAnimal[]> => {
   const token = getToken();
   try {
@@ -245,7 +233,6 @@ export const getUpcomingEvents = async (days: number = 7): Promise<CalendarEvent
   }
 };
 
-// Események típus szerinti statisztika
 export const getEventStats = async (year: number, month: number): Promise<any> => {
   const token = getToken();
   try {

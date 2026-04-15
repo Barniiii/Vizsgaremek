@@ -89,7 +89,6 @@ interface Segment {
   percentage: number;
 }
 
-// Kördiagram komponens
 const DonutChart = ({ 
   expenses, 
   incomes, 
@@ -109,7 +108,6 @@ const DonutChart = ({
   const expenseRatio = total > 0 ? (totalExpenses / total) * 100 : 0;
   const incomeRatio = total > 0 ? (totalIncomes / total) * 100 : 0;
   
-  // Kategóriák összesítése
   const expenseByCategory = expenses.reduce((acc, exp) => {
     acc[exp.category] = (acc[exp.category] || 0) + Number(exp.amount);
     return acc;
@@ -120,7 +118,6 @@ const DonutChart = ({
     return acc;
   }, {} as Record<string, number>);
   
-  // SVG path generálás
   const createDonutSegment = (startAngle: number, endAngle: number, innerRadius: number, outerRadius: number): string => {
     const startAngleRad = (startAngle - 90) * (Math.PI / 180);
     const endAngleRad = (endAngle - 90) * (Math.PI / 180);
@@ -140,12 +137,10 @@ const DonutChart = ({
     return `M ${x1} ${y1} A ${outerRadius} ${outerRadius} 0 ${largeArcFlag} 1 ${x2} ${y2} L ${x3} ${y3} A ${innerRadius} ${innerRadius} 0 ${largeArcFlag} 0 ${x4} ${y4} Z`;
   };
   
-  // Szegmensek generálása
   const generateSegments = (): Segment[] => {
     const segments: Segment[] = [];
     let currentAngle = 0;
     
-    // Kiadások szegmensei
     Object.entries(expenseByCategory).forEach(([category, amount]) => {
       const angle = totalExpenses > 0 ? (amount / totalExpenses) * 360 * (expenseRatio / 100) : 0;
       if (angle > 0) {
@@ -163,7 +158,6 @@ const DonutChart = ({
       }
     });
     
-    // Bevételek szegmensei
     Object.entries(incomeByCategory).forEach(([category, amount]) => {
       const angle = totalIncomes > 0 ? (amount / totalIncomes) * 360 * (incomeRatio / 100) : 0;
       if (angle > 0) {

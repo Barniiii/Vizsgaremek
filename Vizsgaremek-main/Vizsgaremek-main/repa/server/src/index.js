@@ -11,7 +11,7 @@ import nodemailer from 'nodemailer';
 import { query } from './db.js';
 import { signToken, requireAuth, requireRole } from './auth.js';
 
-// ES modules __dirname megoldás
+
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
@@ -28,7 +28,7 @@ const {
   SMTP_FROM_NAME = 'BB Agrár',
 } = process.env;
 
-// ==================== NODEMAILER SMTP SETUP ====================
+
 let mailTransporter = null;
 if (SMTP_HOST && SMTP_USER && SMTP_PASS) {
   mailTransporter = nodemailer.createTransport({
@@ -41,8 +41,8 @@ if (SMTP_HOST && SMTP_USER && SMTP_PASS) {
     },
   });
   mailTransporter.verify()
-    .then(() => console.log('✅ SMTP email konfigurálva (' + SMTP_HOST + ')'))
-    .catch((err) => console.error('❌ SMTP kapcsolat hiba:', err.message));
+    .then(() => console.log(' SMTP email konfigurálva (' + SMTP_HOST + ')'))
+    .catch((err) => console.error(' SMTP kapcsolat hiba:', err.message));
 } else {
   console.log('⚠️  SMTP nincs konfigurálva (SMTP_HOST, SMTP_USER, SMTP_PASS szükséges)');
 }
@@ -51,33 +51,33 @@ app.use(cors({ origin: CORS_ORIGIN, credentials: false }));
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ limit: '10mb', extended: true, parameterLimit: 50000 }));
 
-// Statikus fájlok kiszolgálása az uploads mappából
+
 const uploadsPath = path.join(__dirname, '../uploads');
 app.use('/uploads', express.static(uploadsPath));
 
-// --- Uploads mappa létrehozása, ha nem létezik ---
+
 const avatarsPath = path.join(uploadsPath, 'avatars');
 const documentsPath = path.join(uploadsPath, 'documents');
 const marketplacePath = path.join(uploadsPath, 'marketplace');
 
 if (!fs.existsSync(uploadsPath)) {
   fs.mkdirSync(uploadsPath, { recursive: true });
-  console.log('✅ Uploads mappa létrehozva:', uploadsPath);
+  console.log(' Uploads mappa létrehozva:', uploadsPath);
 }
 if (!fs.existsSync(avatarsPath)) {
   fs.mkdirSync(avatarsPath, { recursive: true });
-  console.log('✅ Avatars mappa létrehozva:', avatarsPath);
+  console.log(' Avatars mappa létrehozva:', avatarsPath);
 }
 if (!fs.existsSync(documentsPath)) {
   fs.mkdirSync(documentsPath, { recursive: true });
-  console.log('✅ Documents mappa létrehozva:', documentsPath);
+  console.log(' Documents mappa létrehozva:', documentsPath);
 }
 if (!fs.existsSync(marketplacePath)) {
   fs.mkdirSync(marketplacePath, { recursive: true });
-  console.log('✅ Marketplace mappa létrehozva:', marketplacePath);
+  console.log(' Marketplace mappa létrehozva:', marketplacePath);
 }
 
-// --- Multer konfiguráció ---
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     let uploadDir = uploadsPath;
@@ -137,7 +137,7 @@ const fileFilter = (req, file, cb) => {
     'image/tiff',
   ];
 
-  // Elfogadjuk a fájlkiterjesztés alapján is
+
   const allowedExtensions = [
     '.pdf', '.doc', '.docx', '.xls', '.xlsx', '.ppt', '.pptx',
     '.txt', '.csv', '.xml', '.json', '.rtf',
@@ -154,7 +154,7 @@ const fileFilter = (req, file, cb) => {
   }
 };
 
-// Marketplace upload - handle MULTIPLE image files + all text fields
+
 const uploadMarketplace = multer({
   storage: multer.diskStorage({
     destination: marketplacePath,
@@ -172,10 +172,10 @@ const uploadMarketplace = multer({
 const upload = multer({ 
   storage: storage,
   fileFilter: fileFilter,
-  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+  limits: { fileSize: 10 * 1024 * 1024 } 
 });
 
-// Health check
+
 app.get('/health', async (req, res) => {
   try {
     await query('SELECT 1');
@@ -185,10 +185,10 @@ app.get('/health', async (req, res) => {
   }
 });
 
-// Database table initialization
+
 async function initializeDatabase() {
   try {
-    // Just verify database connection works
+
     const result = await query('SELECT 1');
     console.log('✅ Database connection verified');
   } catch (error) {
@@ -197,7 +197,6 @@ async function initializeDatabase() {
   }
 }
 
-// Initialize database on startup with retry logic
 async function initializeWithRetry(retries = 10, delay = 3000) {
   for (let i = 0; i < retries; i++) {
     try {
@@ -216,7 +215,6 @@ async function initializeWithRetry(retries = 10, delay = 3000) {
 
 initializeWithRetry();
 
-// ==================== AUTH ENDPOINTS ====================
 
 app.post('/api/auth/register', upload.single('avatar'), async (req, res) => {
   const { username, email, password, phone, location } = req.body || {};
@@ -286,9 +284,7 @@ app.get('/api/me', requireAuth, async (req, res) => {
   return res.json({ user: rows[0] });
 });
 
-// ==================== PROFILE MANAGEMENT ====================
 
-// Profil adatok lekérése
 app.get('/api/profile', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -309,7 +305,6 @@ app.get('/api/profile', requireAuth, async (req, res) => {
   }
 });
 
-// Profil adatok frissítése
 app.put('/api/profile', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -318,8 +313,7 @@ app.put('/api/profile', requireAuth, async (req, res) => {
     if (!username || !email) {
       return res.status(400).json({ error: 'Username and email are required' });
     }
-    
-    // Ellenőrizzük, hogy az email nem foglalt-e más felhasználó által
+
     const existingEmail = await query(
       'SELECT id FROM users WHERE email = ? AND id != ?',
       [email, userId]
@@ -329,7 +323,7 @@ app.put('/api/profile', requireAuth, async (req, res) => {
       return res.status(409).json({ error: 'Email already in use by another user' });
     }
     
-    // Profil frissítése
+
     await query(
       `UPDATE users 
        SET username = ?, email = ?, phone = ?, location = ?, bio = ?, avatar = ?, updated_at = CURRENT_TIMESTAMP 
@@ -337,7 +331,7 @@ app.put('/api/profile', requireAuth, async (req, res) => {
       [username, email, phone || null, location || null, bio || null, avatar || null, userId]
     );
     
-    // Frissített adatok lekérése
+
     const [updatedProfile] = await query(
       'SELECT id, username, email, phone, location, bio, avatar, created_at FROM users WHERE id = ?',
       [userId]
@@ -354,7 +348,7 @@ app.put('/api/profile', requireAuth, async (req, res) => {
   }
 });
 
-// Profilkép feltöltése
+
 app.post('/api/profile/avatar', requireAuth, upload.single('avatar'), async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -389,7 +383,6 @@ app.post('/api/profile/avatar', requireAuth, upload.single('avatar'), async (req
   }
 });
 
-// Jelszó módosítás
 app.put('/api/profile/password', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -434,7 +427,6 @@ app.put('/api/profile/password', requireAuth, async (req, res) => {
   }
 });
 
-// ==================== DASHBOARD ====================
 
 app.get('/api/dashboard/stats', requireAuth, async (req, res) => {
   const userId = req.user.userId;
@@ -448,7 +440,6 @@ app.get('/api/dashboard/stats', requireAuth, async (req, res) => {
   return res.json({ animalCount, balance });
 });
 
-// ==================== ANIMALS ====================
 
 app.get('/api/animals', requireAuth, async (req, res) => {
   try {
@@ -475,7 +466,6 @@ app.post('/api/animals', requireAuth, requireRole(['owner','admin','worker']), a
       return res.status(400).json({ error: 'Species and identifier are required' });
     }
     
-    // Biztonságos string feldolgozás
     const trimValue = (val) => {
       if (typeof val !== 'string') return null;
       const trimmed = val.trim();
@@ -502,14 +492,12 @@ app.post('/api/animals', requireAuth, requireRole(['owner','admin','worker']), a
   }
 });
 
-// Update animal
 app.put('/api/animals/:id', requireAuth, requireRole(['owner','admin','worker']), async (req, res) => {
   try {
     const { id } = req.params;
     const userId = req.user.userId;
     const { name, species, breed, identifier, birth_date, stable, gender, purpose, notes, dam_id, sire_id } = req.body;
 
-    // Biztonságos string feldolgozás
     const trimValue = (val) => {
       if (typeof val !== 'string') return null;
       const trimmed = val.trim();
@@ -718,7 +706,6 @@ app.delete('/api/incomes/:id', requireAuth, async (req, res) => {
   }
 });
 
-// ==================== CLIENTS ====================
 
 app.get('/api/clients', requireAuth, async (req, res) => {
   const userId = req.user.userId;
@@ -832,21 +819,18 @@ app.delete('/api/clients/:id', requireAuth, async (req, res) => {
   }
 });
 
-// ==================== MARKETPLACE ====================
 
 app.get('/api/marketplace', async (req, res) => {
   try {
     console.log('Marketplace GET - összes hirdetés lekérése');
     const rows = await query('SELECT * FROM marketplace ORDER BY created_at DESC');
     
-    // Képek lekérése minden hirdetéshez
     for (const row of rows) {
       const images = await query(
         'SELECT id, image_url, sort_order FROM marketplace_images WHERE marketplace_id = ? ORDER BY sort_order ASC',
         [row.id]
       );
       row.images = images.map(img => img.image_url);
-      // Backward compatibility: ha nincs image_url de vannak képek
       if (!row.image_url && images.length > 0) {
         row.image_url = images[0].image_url;
       }
@@ -863,7 +847,7 @@ app.post('/api/marketplace', requireAuth, uploadMarketplace.array('images', 10),
   try {
     const userId = req.user.userId;
     
-    // Debug: Ellenőrizzük mi érkezett
+
     console.log('🔍 Marketplace POST - Adatok érkeztek:');
     console.log('  req.body:', req.body);
     console.log('  req.files:', req.files ? `${req.files.length} fájl` : 'nincs fájl');
@@ -877,7 +861,6 @@ app.post('/api/marketplace', requireAuth, uploadMarketplace.array('images', 10),
       return res.status(400).json({ error: 'title, type, price required' });
     }
     
-    // Az első kép URL-je a fő image_url mezőbe kerül (backward compatibility)
     let image_url = null;
     if (req.files && req.files.length > 0) {
       image_url = `/uploads/marketplace/${req.files[0].filename}`;
@@ -892,7 +875,7 @@ app.post('/api/marketplace', requireAuth, uploadMarketplace.array('images', 10),
       [userId, title, description, type, price, image_url, location, contact_name, contact_phone, contact_email]
     );
     
-    // Képek mentése a marketplace_images táblába
+  
     if (req.files && req.files.length > 0) {
       for (let i = 0; i < req.files.length; i++) {
         const imgUrl = `/uploads/marketplace/${req.files[i].filename}`;
@@ -903,7 +886,7 @@ app.post('/api/marketplace', requireAuth, uploadMarketplace.array('images', 10),
       }
     }
     
-    // Értesítés küldése MINDEN felhasználónak (kivéve a hirdetőt)
+
     const users = await query('SELECT id FROM users WHERE id != ?', [userId]);
     
     for (const user of users) {
@@ -927,8 +910,7 @@ app.post('/api/marketplace', requireAuth, uploadMarketplace.array('images', 10),
     }
     
     const rows = await query('SELECT * FROM marketplace WHERE id = ?', [result.insertId]);
-    
-    // Képek hozzáadása a válaszhoz
+
     const savedImages = await query(
       'SELECT image_url FROM marketplace_images WHERE marketplace_id = ? ORDER BY sort_order ASC',
       [result.insertId]
@@ -963,7 +945,7 @@ app.put('/api/marketplace/:id', requireAuth, uploadMarketplace.array('images', 1
       return res.status(403).json({ error: 'Nincs jogosultságod frissíteni ezt a hirdetést' });
     }
     
-    // Build update query dynamically based on provided fields
+
     const updateFields = [];
     const updateValues = [];
     
@@ -983,18 +965,17 @@ app.put('/api/marketplace/:id', requireAuth, uploadMarketplace.array('images', 1
       updateFields.push('price = ?');
       updateValues.push(price);
     }
-    
-    // Ha vannak új feltöltött képek
+
     if (req.files && req.files.length > 0) {
-      // Első kép a fő image_url (backward compatibility)
+
       updateFields.push('image_url = ?');
       updateValues.push(`/uploads/marketplace/${req.files[0].filename}`);
       console.log('📸 Új képek feltöltve:', req.files.length, 'db');
       
-      // Régi képek törlése a marketplace_images táblából
+
       await query('DELETE FROM marketplace_images WHERE marketplace_id = ?', [id]);
       
-      // Új képek mentése
+
       for (let i = 0; i < req.files.length; i++) {
         const imgUrl = `/uploads/marketplace/${req.files[i].filename}`;
         await query(
@@ -1034,10 +1015,10 @@ app.put('/api/marketplace/:id', requireAuth, uploadMarketplace.array('images', 1
     
     await query(updateQuery, updateValues);
     
-    // Get updated item
+
     const [updated] = await query('SELECT * FROM marketplace WHERE id = ?', [id]);
     
-    // Képek lekérése
+
     const images = await query(
       'SELECT image_url FROM marketplace_images WHERE marketplace_id = ? ORDER BY sort_order ASC',
       [id]
@@ -1083,7 +1064,6 @@ app.delete('/api/marketplace/:id', requireAuth, async (req, res) => {
 
 // ==================== DOCUMENTS ====================
 
-// Entitások lekérése a dropdownokhoz
 app.get('/api/documents/entities/animals', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1126,7 +1106,6 @@ app.get('/api/documents/entities/clients', requireAuth, async (req, res) => {
   }
 });
 
-// Dokumentumok lekérése
 app.get('/api/documents', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1154,7 +1133,7 @@ app.get('/api/documents', requireAuth, async (req, res) => {
   }
 });
 
-// Dokumentum feltöltése
+
 app.post('/api/documents', requireAuth, requireRole(['owner','admin','worker']), (req, res, next) => {
   upload.single('file')(req, res, (err) => {
     if (err) {
@@ -1217,7 +1196,7 @@ app.post('/api/documents', requireAuth, requireRole(['owner','admin','worker']),
   }
 });
 
-// Dokumentum letöltése
+
 app.get('/api/documents/:id/download', requireAuth, async (req, res) => {
   try {
     const rows = await query(
@@ -1244,7 +1223,7 @@ app.get('/api/documents/:id/download', requireAuth, async (req, res) => {
   }
 });
 
-// Dokumentum törlése
+
 app.delete('/api/documents/:id', requireAuth, async (req, res) => {
   try {
     const rows = await query(
@@ -1278,7 +1257,7 @@ app.delete('/api/documents/:id', requireAuth, async (req, res) => {
 
 // ==================== CALENDAR ====================
 
-// Események lekérése
+
 app.get('/api/calendar/events', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1305,7 +1284,7 @@ app.get('/api/calendar/events', requireAuth, async (req, res) => {
   }
 });
 
-// Közelgő események
+
 app.get('/api/calendar/events/upcoming', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1332,7 +1311,7 @@ app.get('/api/calendar/events/upcoming', requireAuth, async (req, res) => {
   }
 });
 
-// Esemény lekérése ID alapján
+
 app.get('/api/calendar/events/:id', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1365,7 +1344,7 @@ app.get('/api/calendar/events/:id', requireAuth, async (req, res) => {
   }
 });
 
-// Új esemény hozzáadása
+
 app.post('/api/calendar/events', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1391,7 +1370,7 @@ app.post('/api/calendar/events', requireAuth, async (req, res) => {
       [result.insertId]
     );
 
-    // Értesítés küldése az esemény létrehozójának
+
     await query(
       `INSERT INTO notifications (user_id, type, title, message, data) VALUES (?, 'event_created', ?, ?, ?)`,
       [userId, 'Új esemény létrehozva', `${title} - ${event_date}`, JSON.stringify({ event_id: result.insertId })]
@@ -1404,7 +1383,7 @@ app.post('/api/calendar/events', requireAuth, async (req, res) => {
   }
 });
 
-// Esemény módosítása
+
 app.put('/api/calendar/events/:id', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1456,7 +1435,7 @@ app.put('/api/calendar/events/:id', requireAuth, async (req, res) => {
   }
 });
 
-// Esemény státusz módosítása
+
 app.patch('/api/calendar/events/:id/status', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1483,7 +1462,7 @@ app.patch('/api/calendar/events/:id/status', requireAuth, async (req, res) => {
   }
 });
 
-// Esemény törlése
+
 app.delete('/api/calendar/events/:id', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1505,7 +1484,7 @@ app.delete('/api/calendar/events/:id', requireAuth, async (req, res) => {
   }
 });
 
-// Események statisztika
+
 app.get('/api/calendar/events/stats', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1616,7 +1595,7 @@ app.put('/api/admin/users/:id', requireAuth, requireRole(['owner','admin']), asy
 
 // ==================== NOTIFICATIONS ====================
 
-// Értesítések lekérése
+
 app.get('/api/notifications', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1630,7 +1609,7 @@ app.get('/api/notifications', requireAuth, async (req, res) => {
     }
     queryStr += ` ORDER BY created_at DESC LIMIT ${limit}`;
     const notifications = await query(queryStr, params);
-    // Olvasatlanok száma
+
     const [unreadCount] = await query(
       'SELECT COUNT(*) as count FROM notifications WHERE user_id = ? AND is_read = FALSE',
       [userId]
@@ -1645,7 +1624,7 @@ app.get('/api/notifications', requireAuth, async (req, res) => {
   }
 });
 
-// Értesítés megjelölése olvasottként
+
 app.put('/api/notifications/:id/read', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1663,7 +1642,6 @@ app.put('/api/notifications/:id/read', requireAuth, async (req, res) => {
   }
 });
 
-// Összes értesítés megjelölése olvasottként
 app.put('/api/notifications/read-all', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1680,7 +1658,7 @@ app.put('/api/notifications/read-all', requireAuth, async (req, res) => {
   }
 });
 
-// Értesítés törlése
+
 app.delete('/api/notifications/:id', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1698,7 +1676,6 @@ app.delete('/api/notifications/:id', requireAuth, async (req, res) => {
   }
 });
 
-// Értesítési beállítások lekérése
 app.get('/api/notification-settings', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1709,7 +1686,7 @@ app.get('/api/notification-settings', requireAuth, async (req, res) => {
     );
     
     if (!settings) {
-      // Alapértelmezett beállítások létrehozása
+
       await query(
         `INSERT INTO notification_settings 
          (user_id, email_notifications, browser_notifications, event_reminders, marketplace_alerts, system_updates) 
@@ -1729,7 +1706,6 @@ app.get('/api/notification-settings', requireAuth, async (req, res) => {
   }
 });
 
-// Értesítési beállítások frissítése
 app.put('/api/notification-settings', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1757,7 +1733,7 @@ app.put('/api/notification-settings', requireAuth, async (req, res) => {
 
 // ==================== NOTIFICATION TRIGGERS ====================
 
-// Admin: Értesítés küldése minden felhasználónak
+
 app.post('/api/admin/send-notification', requireAuth, requireRole(['owner','admin']), async (req, res) => {
   try {
     const { title, message, type = 'system_update' } = req.body;
@@ -1781,7 +1757,7 @@ app.post('/api/admin/send-notification', requireAuth, requireRole(['owner','admi
   }
 });
 
-// Ellenőrző funkció a közelgő eseményekhez (ezt cron jobban vagy időzítetten kell futtatni)
+
 app.get('/api/check-upcoming-events', requireAuth, async (req, res) => {
   try {
     const userId = req.user.userId;
@@ -1789,23 +1765,23 @@ app.get('/api/check-upcoming-events', requireAuth, async (req, res) => {
     const tomorrow = new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString().split('T')[0];
     const threeDaysLater = new Date(Date.now() + 3 * 24 * 60 * 60 * 1000).toISOString().split('T')[0];
     
-    // Holnapi események
+
     const tomorrowEvents = await query(
       `SELECT * FROM calendar_events 
        WHERE user_id = ? AND event_date = ?`,
       [userId, tomorrow]
     );
     
-    // Következő 3 nap eseményei
+
     const upcomingEvents = await query(
       `SELECT * FROM calendar_events 
        WHERE user_id = ? AND event_date BETWEEN ? AND ?`,
       [userId, tomorrow, threeDaysLater]
     );
     
-    // Értesítések küldése a holnapi eseményekről
+
     for (const event of tomorrowEvents) {
-      // Ellenőrizzük, hogy már küldtünk-e értesítést
+   
       const existingNotification = await query(
         `SELECT id FROM notifications 
          WHERE user_id = ? AND type = 'event_reminder' 
@@ -1860,7 +1836,7 @@ app.post('/api/send-circular-email', requireAuth, async (req, res) => {
       return res.status(500).json({ error: 'Email küldés nincs konfigurálva. Kérjük állítsa be az SMTP beállításokat a .env fájlban (SMTP_HOST, SMTP_USER, SMTP_PASS).' });
     }
     
-    // HTML formázás az üzenethez
+
     const htmlBody = `
       <html>
         <body style="font-family: Arial, sans-serif; line-height: 1.6; color: #333;">
@@ -1877,7 +1853,7 @@ app.post('/api/send-circular-email', requireAuth, async (req, res) => {
 
     const fromAddress = SMTP_FROM_EMAIL || SMTP_USER;
 
-    // Email küldés nodemailer-en keresztül
+
     const results = [];
     for (const email of emails) {
       try {

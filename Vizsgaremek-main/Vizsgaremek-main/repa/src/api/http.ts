@@ -5,7 +5,7 @@ export type HttpMethod = 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
 export async function apiRequest<T>(path: string, options: { method?: HttpMethod; body?: any; token?: string | null } = {}): Promise<T> {
   const { method = 'GET', body, token } = options;
 
-  // Ellenőrizzük, hogy a body FormData-e
+
   const isFormData = body instanceof FormData;
 
   const headers: HeadersInit = {};
@@ -14,7 +14,7 @@ export async function apiRequest<T>(path: string, options: { method?: HttpMethod
     headers['Authorization'] = `Bearer ${token}`;
   }
   
-  // Ha nem FormData, akkor beállítjuk a Content-Type-t
+
   if (!isFormData) {
     headers['Content-Type'] = 'application/json';
   }
@@ -24,13 +24,13 @@ export async function apiRequest<T>(path: string, options: { method?: HttpMethod
     headers,
   };
 
-  // Body kezelése
+
   if (body !== undefined) {
     if (isFormData) {
-      // FormData-t közvetlenül küldjük
+
       fetchOptions.body = body;
     } else {
-      // JSON.stringify a nem-FormData body-kra
+
       fetchOptions.body = JSON.stringify(body);
     }
   }

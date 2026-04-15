@@ -22,7 +22,7 @@ const NotificationCenter = () => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
 
-  // Backend API URL fix
+
   const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4001';
 
   const fetchNotifications = async () => {

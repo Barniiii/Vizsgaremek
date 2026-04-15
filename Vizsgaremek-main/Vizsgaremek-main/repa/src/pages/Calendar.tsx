@@ -8,7 +8,6 @@ import { getEvents, addEvent, updateEvent, deleteEvent, updateEventStatus, getEv
 import { getAnimals } from '../db/operations';
 import { useTheme } from '../context/ThemeContext';
 
-// Segédfüggvény a dátum formázásához (időzóna probléma elkerülése)
 const formatDate = (date: Date): string => {
   const year = date.getFullYear();
   const month = String(date.getMonth() + 1).padStart(2, '0');
@@ -16,16 +15,13 @@ const formatDate = (date: Date): string => {
   return `${year}-${month}-${day}`;
 };
 
-// Safe date parsing helper
 const parseDateSafe = (dateString?: string): Date | null => {
   if (!dateString) return null;
   try {
-    // Handle YYYY-MM-DD format directly
     if (dateString.length === 10 && dateString.match(/^\d{4}-\d{2}-\d{2}$/)) {
       const [year, month, day] = dateString.split('-').map(Number);
-      return new Date(year, month - 1, day); // month is 0-indexed
+      return new Date(year, month - 1, day); 
     }
-    // Handle ISO format (2026-03-29T00:00:00Z)
     if (dateString.includes('T')) {
       const dateOnly = dateString.split('T')[0];
       const [year, month, day] = dateOnly.split('-').map(Number);
@@ -38,7 +34,6 @@ const parseDateSafe = (dateString?: string): Date | null => {
   }
 };
 
-// Animal interface definiálása
 interface Animal {
   id: number;
   name?: string;
@@ -50,17 +45,14 @@ interface Animal {
   notes?: string;
 }
 
-// Hónapok nevei
 const MONTHS = [
   'Január', 'Február', 'Március', 'Április', 'Május', 'Június',
   'Július', 'Augusztus', 'Szeptember', 'Október', 'November', 'December'
 ];
 
-// Napok nevei
 const WEEKDAYS = ['H', 'K', 'Sze', 'Cs', 'P', 'Szo', 'V'];
 const WEEKDAYS_FULL = ['Hétfő', 'Kedd', 'Szerda', 'Csütörtök', 'Péntek', 'Szombat', 'Vasárnap'];
 
-// Esemény típusok és színeik
 const EVENT_TYPES = [
   { value: 'task', label: 'Feladat', icon: '📋', color: 'from-blue-500 to-cyan-500', bgColor: 'bg-blue-100', darkBgColor: 'bg-blue-900/30', textColor: 'text-blue-800', darkTextColor: 'text-blue-300', borderColor: 'border-blue-300', darkBorderColor: 'border-blue-700' },
   { value: 'appointment', label: 'Időpont', icon: '📅', color: 'from-purple-500 to-indigo-500', bgColor: 'bg-purple-100', darkBgColor: 'bg-purple-900/30', textColor: 'text-purple-800', darkTextColor: 'text-purple-300', borderColor: 'border-purple-300', darkBorderColor: 'border-purple-700' },
@@ -70,7 +62,6 @@ const EVENT_TYPES = [
   { value: 'other', label: 'Egyéb', icon: '📌', color: 'from-gray-500 to-slate-500', bgColor: 'bg-gray-100', darkBgColor: 'bg-gray-800', textColor: 'text-gray-800', darkTextColor: 'text-gray-300', borderColor: 'border-gray-300', darkBorderColor: 'border-gray-700' }
 ];
 
-// Prioritások
 const PRIORITIES = [
   { value: 'low', label: 'Alacsony', icon: '⚪', color: 'bg-gray-100 text-gray-700', darkColor: 'bg-gray-800 text-gray-300' },
   { value: 'medium', label: 'Közepes', icon: '🟡', color: 'bg-yellow-100 text-yellow-700', darkColor: 'bg-yellow-900/30 text-yellow-300' },
@@ -78,7 +69,6 @@ const PRIORITIES = [
   { value: 'urgent', label: 'Sürgős', icon: '🔴', color: 'bg-red-100 text-red-700', darkColor: 'bg-red-900/30 text-red-300' }
 ];
 
-// Ismétlődés típusok
 const RECURRING_TYPES = [
   { value: 'none', label: 'Nem ismétlődő' },
   { value: 'daily', label: 'Naponta' },
@@ -90,20 +80,17 @@ const RECURRING_TYPES = [
 const Calendar = () => {
   const { isDarkMode } = useTheme();
   
-  // Dátum állapotok
   const [currentDate, setCurrentDate] = useState(new Date());
   const [selectedDate, setSelectedDate] = useState<string>(
     formatDate(new Date())
   );
   const [viewMode, setViewMode] = useState<'month' | 'week' | 'day'>('month');
   
-  // Események állapotok
   const [events, setEvents] = useState<CalendarEventWithAnimal[]>([]);
   const [selectedDateEvents, setSelectedDateEvents] = useState<CalendarEventWithAnimal[]>([]);
   const [upcomingEvents, setUpcomingEvents] = useState<CalendarEventWithAnimal[]>([]);
   const [animals, setAnimals] = useState<Animal[]>([]);
   
-  // UI állapotok
   const [showForm, setShowForm] = useState(false);
   const [editingEvent, setEditingEvent] = useState<CalendarEventWithAnimal | null>(null);
   const [search, setSearch] = useState('');
@@ -111,7 +98,6 @@ const Calendar = () => {
   const [filterPriority, setFilterPriority] = useState<string>('all');
   const [deletingId, setDeletingId] = useState<number | null>(null);
   
-  // Űrlap állapot - event_date MINDIG az aktuális selectedDate
   const [formData, setFormData] = useState<Partial<CalendarEvent>>({
     title: '',
     description: '',
@@ -130,7 +116,6 @@ const Calendar = () => {
     color: ''
   });
 
-  // Adatok betöltése
   useEffect(() => {
     loadInitialData();
   }, []);
@@ -220,7 +205,6 @@ const Calendar = () => {
     }
   };
 
-  // Hét első napjának kiszámítása (hétfő)
   const getWeekStart = (date: Date) => {
     const d = new Date(date);
     const day = d.getDay();
@@ -228,7 +212,6 @@ const Calendar = () => {
     return new Date(d.setDate(diff));
   };
 
-  // Naptár navigáció
   const prevMonth = () => {
     setCurrentDate(new Date(currentDate.getFullYear(), currentDate.getMonth() - 1, 1));
   };

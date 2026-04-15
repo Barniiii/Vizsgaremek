@@ -4,10 +4,10 @@ const path = require('path');
 const fs = require('fs');
 const router = express.Router();
 
-// Feltöltési mappa beállítása - ABSZOLÚT ÚTVONAL
+
 const uploadDir = path.join(__dirname, '../../uploads');
 
-// Mappa létrehozása, ha nem létezik
+
 if (!fs.existsSync(uploadDir)) {
   fs.mkdirSync(uploadDir, { recursive: true });
   console.log('✅ Uploads mappa létrehozva:', uploadDir);
@@ -15,7 +15,7 @@ if (!fs.existsSync(uploadDir)) {
   console.log('✅ Uploads mappa létezik:', uploadDir);
 }
 
-// Multer storage konfiguráció
+
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     console.log('📁 Fájl mentési útvonal:', uploadDir);
@@ -54,7 +54,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({ 
   storage: storage,
   fileFilter: fileFilter,
-  limits: { fileSize: 10 * 1024 * 1024 } // 10MB limit
+  limits: { fileSize: 10 * 1024 * 1024 } 
 });
 
 // Dokumentumok lekérése
@@ -108,7 +108,7 @@ router.post('/', upload.single('file'), async (req, res) => {
       });
     }
 
-    // Fájl elérési útja - NE használjunk backslasheket!
+    // Fájl elérési útja
     const filepath = `/uploads/${req.file.filename}`;
 
     console.log('📝 Beszúrás adatai:', {
@@ -190,7 +190,6 @@ router.get('/:id/download', async (req, res) => {
 // Dokumentum törlése
 router.delete('/:id', async (req, res) => {
   try {
-    // Először lekérdezzük a dokumentumot, hogy töröljük a fájlt is
     const [rows] = await req.db.query(
       'SELECT filepath FROM documents WHERE id = ? AND user_id = ?',
       [req.params.id, req.userId]
@@ -200,14 +199,13 @@ router.delete('/:id', async (req, res) => {
       return res.status(404).json({ error: 'Dokumentum nem található' });
     }
 
-    // Fájl törlése a szerverről
     const filepath = path.join(__dirname, '../../', rows[0].filepath);
     if (fs.existsSync(filepath)) {
       fs.unlinkSync(filepath);
       console.log('🗑️ Fájl törölve:', filepath);
     }
 
-    // Adatbázis rekord törlése
+
     await req.db.query(
       'DELETE FROM documents WHERE id = ? AND user_id = ?',
       [req.params.id, req.userId]
@@ -222,7 +220,7 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// Állatok lekérése a dropdownhoz
+
 router.get('/entities/animals', async (req, res) => {
   try {
     const [rows] = await req.db.query(
@@ -236,7 +234,7 @@ router.get('/entities/animals', async (req, res) => {
   }
 });
 
-// Földek lekérése a dropdownhoz
+
 router.get('/entities/lands', async (req, res) => {
   try {
     const [rows] = await req.db.query(
@@ -250,7 +248,7 @@ router.get('/entities/lands', async (req, res) => {
   }
 });
 
-// Kliensek lekérése a dropdownhoz
+
 router.get('/entities/clients', async (req, res) => {
   try {
     const [rows] = await req.db.query(

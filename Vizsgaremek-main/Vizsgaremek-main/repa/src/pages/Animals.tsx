@@ -34,7 +34,6 @@ const Animals = () => {
   const [sortDirection, setSortDirection] = useState<SortDirection>('asc');
   const [deletingId, setDeletingId] = useState<number | null>(null);
   
-  // Edit state
   const [showEditForm, setShowEditForm] = useState(false);
   const [editingAnimal, setEditingAnimal] = useState<Animal | null>(null);
   
@@ -52,7 +51,6 @@ const Animals = () => {
     sire_id: null as number | null,
   });
 
-  // Bulk upload state
   const [bulkTemplate, setBulkTemplate] = useState({
     species: '',
     breed: '',
@@ -140,7 +138,6 @@ const Animals = () => {
   const handleBulkSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Validálás: legalább egy sor és template adatok
     if (bulkAnimals.length === 0 || bulkAnimals.every(a => !a.identifier && !a.name)) {
       alert('Legalább egy állatot meg kell adni (azonosító és/vagy név)');
       return;
@@ -209,7 +206,6 @@ const Animals = () => {
 
   const startEdit = (animal: Animal) => {
     setEditingAnimal(animal);
-    // Format date from ISO string (2026-03-28T00:00:00.000Z) to yyyy-MM-dd
     const formatDate = (dateStr?: string) => {
       if (!dateStr) return '';
       const date = new Date(dateStr);
@@ -561,7 +557,7 @@ const Animals = () => {
                 </button>
               </div>
 
-              {/* Tab switch: Single / Bulk */}
+              {/* Bulk */}
               <div className="flex gap-2 mb-6 border-b" style={{borderColor: isDarkMode ? '#374151' : '#e5e7eb'}}>
                 <button
                   onClick={() => setAddMode('single')}

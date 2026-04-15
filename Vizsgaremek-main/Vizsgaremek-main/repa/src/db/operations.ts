@@ -1,7 +1,6 @@
 import { apiRequest } from '../api/http';
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4001';
 
-// DELETE műveletekhez specifikus típus
 interface DeleteResponse {
   success: boolean;
 }
@@ -26,7 +25,6 @@ interface RequestOptions {
   method?: 'GET' | 'POST' | 'PUT' | 'DELETE';
   body?: any;
   token?: string | null;
-  // FormData esetén ne állítsuk be a Content-Type-t
   skipContentType?: boolean;
 }
 
@@ -132,7 +130,6 @@ export const deleteAnimal = async (id: number) => {
   }
 };
 
-// Lands
 export const getLands = async () => {
   const token = getToken();
   try {
@@ -627,7 +624,6 @@ export const deleteTimesheet = async (id: number) => {
   return response;
 };
 
-// Email - Kör-email SendGrid-gal
 export const sendCircularEmail = async (emails: string[], subject: string, message: string) => {
   const token = getToken();
   try {
