@@ -10,8 +10,8 @@ import {themes as prismThemes} from 'prism-react-renderer';
 
 /** @type {import('@docusaurus/types').Config} */
 const config = {
-  title: 'BB Agrár',
-  tagline: 'Szoftverfejlesztő és tesztelő',
+  title: 'My Site',
+  tagline: 'Dinosaurs are cool',
   favicon: 'img/favicon.ico',
 
   // Future flags, see https://docusaurus.io/docs/api/docusaurus-config#future
@@ -53,10 +53,10 @@ const config = {
             'https://github.com/facebook/docusaurus/tree/main/packages/create-docusaurus/templates/shared/',
         },
         blog: {
-          showReadingTime: false,
+          showReadingTime: true,
           feedOptions: {
             type: ['rss', 'atom'],
-            xslt: false,
+            xslt: true,
           },
           // Please change this to your repo.
           // Remove this to remove the "edit this page" links.
@@ -85,8 +85,8 @@ const config = {
       navbar: {
         title: 'BB Agrár',
         logo: {
-          alt: 'BB Agrár Logo',
-          src: 'img/logo.svg',
+          alt: 'My Site Logo',
+          src: '/img/image1.png',
         },
         items: [
           {
@@ -131,21 +131,27 @@ const config = {
               },
             ],
           },
+          {
+            title: 'More',
+            items: [
+              {
+                label: 'Blog',
+                to: '/blog',
+              },
+              {
+                label: 'GitHub',
+                href: 'https://github.com/facebook/docusaurus',
+              },
+            ],
+          },
         ],
-        copyright: `Copyright © ${new Date().getFullYear()} BB Agrár. Készítette: Nagy Barnabás és Savanyó Balázs.`,
+        copyright: `Copyright © ${new Date().getFullYear()} My Project, Inc. Built with Docusaurus.`,
       },
       prism: {
         theme: prismThemes.github,
         darkTheme: prismThemes.dracula,
       },
     }),
-
-  scripts: [
-    {
-      src: 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/js/all.min.js',
-      async: true,
-    },
-  ],
 };
 
 export default config;
